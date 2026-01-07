@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+main {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.to-do-task {
+  background-color: red;
+}
+.doing-task {
+  background-color: yellow;
+}
+.done-task {
+  background-color: green;
+}
+th {
+  padding: 10px;
+}
+td {
+  padding: 10px;
+  text-align: center;
+}
+.tasks-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
