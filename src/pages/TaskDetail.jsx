@@ -1,12 +1,17 @@
 import { useDefaultContext } from "../Contexts/DefaultContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 export default function TaskDetail() {
-  const { tasks } = useDefaultContext();
+  const { tasks, removeTask } = useDefaultContext();
   const detailTaskNum = useParams();
   const detailedTask = tasks.find((t) => t.id == detailTaskNum.id);
-  console.log(detailedTask);
+  const navigate = useNavigate();
 
+  const handleDelete = (id) => {
+    removeTask(id);
+    alert("Task eliminato");
+    navigate(-1);
+  };
   return (
     <div>
       <h1>{detailedTask?.title}</h1>
@@ -23,7 +28,9 @@ export default function TaskDetail() {
         {detailedTask?.status}
       </strong>
       <p>{dayjs(detailedTask?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
-      <button onClick={() => console.log("Elimino task")}>Elimina Task</button>
+      <button onClick={() => handleDelete(detailedTask.id)}>
+        Elimina Task
+      </button>
     </div>
   );
 }

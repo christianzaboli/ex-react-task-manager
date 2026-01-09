@@ -36,7 +36,19 @@ export default function useTasks() {
       .catch((err) => console.error(err));
   }
 
-  function removeTask() {}
+  function removeTask(id) {
+    fetch(`${apiUrl}/tasks/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          setTasks((curr) => curr.filter((t) => t.id !== id));
+        } else {
+          throw new Error(res.message);
+        }
+      });
+  }
   function updateTask() {}
   return { tasks, addTask, removeTask, updateTask };
 }
