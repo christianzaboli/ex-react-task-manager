@@ -6,7 +6,7 @@ const TaskRow = memo(function TaskRow({ task }) {
       <td>{task.title}</td>
       <td
         className={
-          task.status === "To-do"
+          task.status === "To do"
             ? "to-do-task"
             : task.status === "Doing"
             ? "doing-task"

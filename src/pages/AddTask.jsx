@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
+import { useDefaultContext } from "../Contexts/DefaultContext";
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 export default function AddTask() {
+  const { addTask } = useDefaultContext();
   const [title, setTitle] = useState("");
   const descRef = useRef();
   const statusRef = useRef();
@@ -16,11 +18,15 @@ export default function AddTask() {
       console.error("Il campo Nome del task contiene caratteri non validi");
       return;
     }
-    console.log({
+    const data = {
       title,
       description: descRef.current.value,
       status: statusRef.current.value,
-    });
+    };
+    addTask(data);
+    setTitle("");
+    descRef.current.value = "";
+    statusRef.current.value = "";
   };
 
   return (
