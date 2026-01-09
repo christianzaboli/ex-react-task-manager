@@ -1,9 +1,12 @@
 import { memo } from "react";
-
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 const TaskRow = memo(function TaskRow({ task }) {
   return (
     <tr>
-      <td>{task.title}</td>
+      <td>
+        <Link to={`/task/${task.id}`}>{task.title}</Link>
+      </td>
       <td
         className={
           task.status === "To do"
@@ -15,7 +18,7 @@ const TaskRow = memo(function TaskRow({ task }) {
       >
         {task.status}
       </td>
-      <td>{task.createdAt}</td>
+      <td>{dayjs(task.createdAt).format("YYYY-MM-DD HH:mm:ss")}</td>
     </tr>
   );
 });
