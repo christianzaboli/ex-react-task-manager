@@ -13,7 +13,7 @@ export default function Modal({
     <div className="modal-delete">
       <div className="modal-content">
         <h1>{title}</h1>
-        <p>{content}</p>
+        <div className="modal-inner">{content}</div>
         <div>
           <button onClick={onConfirm}>{confirmText}</button>
           <button onClick={onClose}>Annulla</button>

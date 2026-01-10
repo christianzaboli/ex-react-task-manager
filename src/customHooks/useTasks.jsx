@@ -49,6 +49,22 @@ export default function useTasks() {
         }
       });
   }
-  function updateTask() {}
+  function updateTask(id, updateTask) {
+    fetch(`${apiUrl}/tasks/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateTask),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          fetchTasks();
+        } else {
+          throw new Error(res.message);
+        }
+      });
+  }
   return { tasks, addTask, removeTask, updateTask };
 }

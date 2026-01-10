@@ -114,3 +114,8 @@ button:hover {
     margin: 10px;
   }
 }
+.modal-inner form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
