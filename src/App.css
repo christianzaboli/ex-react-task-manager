@@ -119,3 +119,10 @@ button:hover {
   flex-direction: column;
   gap: 20px;
 }
+th {
+  cursor: pointer;
+  border: black solid 1px;
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
