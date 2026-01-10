@@ -1,10 +1,12 @@
 import { useState, useRef } from "react";
 import { useDefaultContext } from "../Contexts/DefaultContext";
+import { useNavigate } from "react-router-dom";
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 export default function AddTask() {
   const { addTask } = useDefaultContext();
   const [title, setTitle] = useState("");
+  const navigate = useNavigate();
   const descRef = useRef();
   const statusRef = useRef();
 
@@ -27,6 +29,7 @@ export default function AddTask() {
     setTitle("");
     descRef.current.value = "";
     statusRef.current.value = "";
+    navigate("/");
   };
 
   return (

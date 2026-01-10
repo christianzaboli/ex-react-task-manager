@@ -28,11 +28,11 @@ export default function useTasks() {
       .then((res) => {
         if (res.success) {
           alert("Task aggiunta con successo");
+          fetchTasks();
         } else {
           alert(res.message);
         }
       })
-      .then(() => fetchTasks())
       .catch((err) => console.error(err));
   }
 
