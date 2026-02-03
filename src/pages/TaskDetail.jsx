@@ -14,9 +14,14 @@ export default function TaskDetail() {
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
-    removeTask(id);
-    alert("Task eliminato");
-    navigate(-1);
+    try {
+      removeTask(id);
+      alert("Task eliminato");
+      navigate(-1);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
   const handleUpdate = (id, updatedTask) => {
     updateTask(detailedTask.id, updatedTask);
@@ -32,15 +37,17 @@ export default function TaskDetail() {
           detailedTask?.status === "To do"
             ? "to-do-task"
             : detailedTask?.status === "Doing"
-            ? "doing-task"
-            : "done-task"
+              ? "doing-task"
+              : "done-task"
         }
       >
         {detailedTask?.status}
       </strong>
       <p>{dayjs(detailedTask?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
       <div className="detail-buttons">
-        <button onClick={() => setShow(true)}>Elimina Task</button>
+        <button onClick={() => setShow(true)} className="red">
+          Elimina Task
+        </button>
         <button onClick={() => setShowEdit(true)}>Modifica Task</button>
       </div>
       <Modal

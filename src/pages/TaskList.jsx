@@ -1,9 +1,26 @@
 import { useDefaultContext } from "../Contexts/DefaultContext";
 import TaskRow from "../components/TaskRow";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+
+// funzione di debounce
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
 export default function TaskList() {
   const { tasks } = useDefaultContext();
-  const [sortBy, setSortBy] = useState("createdAt");
+
+  // campo di ricerca
+  const [searchQuery, setSearchQuery] = useState("");
+  // utilizzo di callback debounce
+  const debouncedSetQuery = useCallback(debounce(setSearchQuery, 300), []);
+
+  // campi di ordinamento
+  const [sortBy, setSortBy] = useState("title");
   const [sortOrder, setSortOrder] = useState(1);
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -15,27 +32,39 @@ export default function TaskList() {
   };
   const sortedTasks = useMemo(() => {
     if (!tasks) return [];
+    const filteredtasks = [...tasks].filter((tasks) =>
+      tasks.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
     switch (sortBy) {
       case "title":
-        return [...tasks].sort(
-          (a, b) => a.title.localeCompare(b.title) * sortOrder
+        return filteredtasks.sort(
+          (a, b) => a.title.localeCompare(b.title) * sortOrder,
         );
       case "status":
         const statusOrder = { "To do": 3, Doing: 2, Done: 1 };
-        return [...tasks].sort(
-          (a, b) => (statusOrder[a.status] - statusOrder[b.status]) * sortOrder
+        return filteredtasks.sort(
+          (a, b) => (statusOrder[a.status] - statusOrder[b.status]) * sortOrder,
         );
       case "createdAt":
-        return [...tasks].sort(
-          (a, b) => (new Date(a.createdAt) - new Date(b.createdAt)) * sortOrder
+        return filteredtasks.sort(
+          (a, b) =>
+            (new Date(a.createdAt).getTime() -
+              new Date(b.createdAt).getTime()) *
+            sortOrder,
         );
       default:
-        return [...tasks];
+        return filteredtasks;
     }
-  }, [tasks, sortBy, sortOrder]);
+  }, [tasks, sortBy, sortOrder, searchQuery]);
   return (
     <>
       <h1 className="tasks-title">Tasks</h1>
+      <input
+        type="text"
+        placeholder="Ricerca task..."
+        onChange={(e) => debouncedSetQuery(e.target.value)}
+        className="input-search"
+      />
       <table>
         <thead>
           <tr>

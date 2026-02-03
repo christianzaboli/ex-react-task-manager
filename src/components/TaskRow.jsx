@@ -1,7 +1,7 @@
 import { memo } from "react";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-const TaskRow = memo(function TaskRow({ task }) {
+const TaskRow = memo(({ task }) => {
   return (
     <tr>
       <td>

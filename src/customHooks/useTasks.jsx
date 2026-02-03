@@ -28,7 +28,7 @@ export default function useTasks() {
       .then((res) => {
         if (res.success) {
           alert("Task aggiunta con successo");
-          fetchTasks();
+          setTasks((curr) => [...curr, res.task]);
         } else {
           alert(res.message);
         }

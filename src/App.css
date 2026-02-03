@@ -126,3 +126,21 @@ th {
     background-color: #e0e0e0;
   }
 }
+.input-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.detail-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.red {
+  background-color: red;
+  &:hover {
+    background-color: darkred;
+  }
+}
