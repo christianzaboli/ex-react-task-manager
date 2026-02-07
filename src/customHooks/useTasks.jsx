@@ -1,19 +1,14 @@
-import { useEffect, useState } from "react";
+import { useReducer, useEffect } from "react";
+import taskReducer from "../reducers/taskReducer";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function useTasks() {
-  const [tasks, setTasks] = useState([]);
-  async function fetchTasks() {
-    try {
-      const response = await fetch(`${apiUrl}/tasks`);
-      const data = await response.json();
-      setTasks(data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-    }
-  }
+  const [tasks, dispatchTasks] = useReducer(taskReducer, []);
   useEffect(() => {
-    fetchTasks();
+    fetch(`${apiUrl}/tasks`)
+      .then((res) => res.json())
+      .then((tasks) => dispatchTasks({ type: "LOAD_TASK", payload: tasks }))
+      .catch((err) => console.error(err));
   }, []);
 
   // AGGIUNGI
@@ -32,8 +27,8 @@ export default function useTasks() {
     if (!obj.success) {
       alert('Errore nell"aggiunta della nuova task');
     }
+    dispatchTasks({ type: "ADD_TASK", payload: obj.task });
     alert("Task aggiunta con successo");
-    setTasks((prev) => [...prev, obj.task]);
   }
 
   // RIMUOVI
@@ -42,9 +37,8 @@ export default function useTasks() {
       method: "DELETE",
     });
     const obj = await response.json();
-    if (obj.success) {
-      setTasks((curr) => curr.filter((t) => t.id !== id));
-    } else throw new Error(obj.message);
+    if (!obj.success) throw new Error(obj.message);
+    dispatchTasks({ type: "REMOVE_TASK", payload: id });
   }
 
   // AGGIORNA
@@ -66,7 +60,7 @@ export default function useTasks() {
     if (!obj.success) {
       throw new Error(obj.message);
     }
-    setTasks((prev) => prev.map((t) => (t.id === obj.task.id ? obj.task : t)));
+    dispatchTasks({ type: "UPDATE_TASK", payload: obj.task });
   }
 
   // RIMUOVI MULTIPLO
@@ -88,15 +82,17 @@ export default function useTasks() {
       } else {
         rejected.push(taskId);
       }
-      if (fullfilled.length > 0) {
-        setTasks((prev) => prev.filter((t) => !fullfilled.includes(t.id)));
-      }
-      if (rejected.length > 0) {
-        throw new Error(
-          `Errore nell'eliminazione delle task di id ${rejected.join(", ")}`,
-        );
-      }
     });
+
+    if (fullfilled.length > 0) {
+      dispatchTasks({ type: "REMOVE_MULTIPLE_TASK", payload: fullfilled });
+    }
+
+    if (rejected.length > 0) {
+      throw new Error(
+        `Errore nell'eliminazione delle task di id ${rejected.join(", ")}`,
+      );
+    }
   };
 
   return { tasks, addTask, removeTask, updateTask, removeMultipleTasks };

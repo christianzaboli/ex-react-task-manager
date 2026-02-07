@@ -1,39 +1,40 @@
 import { useDefaultContext } from "../Contexts/DefaultContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import Modal from "../components/Modal";
 import EditTaskModal from "../components/EditTaskModal";
 export default function TaskDetail() {
   const { tasks, removeTask, updateTask } = useDefaultContext();
+  const detailTaskNum = useParams();
+  const navigate = useNavigate();
+
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const detailTaskNum = useParams();
   const detailedTask = tasks.find(
     (t) => Number(t.id) === Number(detailTaskNum.id),
   );
-  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     try {
       removeTask(id);
       alert("Task eliminato");
-      navigate(-1);
+      navigate("/");
     } catch (error) {
       console.error(error);
       alert(error.message);
     }
   };
-  const handleUpdate = (id, taskToUpdate) => {
-    updateTask(id, taskToUpdate);
+  const handleUpdate = (taskToUpdate, updatedTask) => {
+    updateTask(taskToUpdate, updatedTask);
     setShowEdit(false);
   };
   return (
     <div className="modal-confirm">
       <h1>{detailedTask?.title}</h1>
-      <p>{detailedTask?.description}</p>
-      <strong
+      <p className="detail-bio">{detailedTask?.description}</p>
+      <p
         className={
           detailedTask?.status === "To do"
             ? "to-do-task"
@@ -43,7 +44,7 @@ export default function TaskDetail() {
         }
       >
         {detailedTask?.status}
-      </strong>
+      </p>
       <p className="detailed-task-date">
         {dayjs(detailedTask?.createdAt).format("DD/MM/YYYY HH:mm:ss")}
       </p>

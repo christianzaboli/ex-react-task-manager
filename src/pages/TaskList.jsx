@@ -20,7 +20,7 @@ export default function TaskList() {
   const debouncedSetQuery = useCallback(debounce(setSearchQuery, 300), []);
 
   // campi di ordinamento
-  const [sortBy, setSortBy] = useState("title");
+  const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState(1);
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -30,32 +30,6 @@ export default function TaskList() {
       setSortOrder(1);
     }
   };
-  const sortedTasks = useMemo(() => {
-    if (!tasks) return [];
-    const filteredtasks = [...tasks].filter((task) =>
-      task.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-    switch (sortBy) {
-      case "title":
-        return filteredtasks.sort(
-          (a, b) => a.title.localeCompare(b.title) * sortOrder,
-        );
-      case "status":
-        const statusOrder = { "To do": 3, Doing: 2, Done: 1 };
-        return filteredtasks.sort(
-          (a, b) => (statusOrder[a.status] - statusOrder[b.status]) * sortOrder,
-        );
-      case "createdAt":
-        return filteredtasks.sort(
-          (a, b) =>
-            (new Date(a.createdAt).getTime() -
-              new Date(b.createdAt).getTime()) *
-            sortOrder,
-        );
-      default:
-        return filteredtasks;
-    }
-  }, [tasks, sortBy, sortOrder, searchQuery]);
 
   // task selezionate
   const [selectedTaskIds, setSelectedTaskIds] = useState([]);
@@ -66,6 +40,32 @@ export default function TaskList() {
       setSelectedTaskIds((prev) => [...prev, taskId]);
     }
   };
+
+  // task showate
+  const sortedTasks = useMemo(() => {
+    const filteredtasks = tasks.filter((task) =>
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+    if (sortBy === "title") {
+      return filteredtasks.sort(
+        (a, b) => a.title.localeCompare(b.title) * sortOrder,
+      );
+    }
+    if (sortBy === "status") {
+      const statusOrder = { "To do": 3, Doing: 2, Done: 1 };
+      return filteredtasks.sort(
+        (a, b) => (statusOrder[a.status] - statusOrder[b.status]) * sortOrder,
+      );
+    }
+    if (sortBy === "createdAt") {
+      return filteredtasks.sort(
+        (a, b) =>
+          (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) *
+          sortOrder,
+      );
+    }
+    return filteredtasks;
+  }, [tasks, sortBy, sortOrder, searchQuery]);
 
   const handleMultipleDelete = async () => {
     try {
@@ -88,22 +88,22 @@ export default function TaskList() {
       <table>
         <thead>
           <tr>
-            <th></th>
+            <th onClick={() => handleSort("")}></th>
             <th
               onClick={() => handleSort("title")}
-              className={sortBy === "title" && "th-active"}
+              className={sortBy === "title" ? "th-active" : null}
             >
               Nome
             </th>
             <th
               onClick={() => handleSort("status")}
-              className={sortBy === "status" && "th-active"}
+              className={sortBy === "status" ? "th-active" : null}
             >
               Stato
             </th>
             <th
               onClick={() => handleSort("createdAt")}
-              className={sortBy === "createdAt" && "th-active"}
+              className={sortBy === "createdAt" ? "th-active" : null}
             >
               Data di Creazione
             </th>
