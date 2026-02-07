@@ -1,0 +1,30 @@
+/* Global Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-lighter);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+/* Selection styling */
+::selection {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}

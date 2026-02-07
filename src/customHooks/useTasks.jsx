@@ -52,7 +52,7 @@ export default function useTasks() {
     const taskWithSameTitle = tasks.find(
       (t) => t.title.toLowerCase() === updatedTask.title.toLowerCase(),
     );
-    if (taskWithSameTitle && taskWithSameTitle.id !== updatedTask.id) {
+    if (taskWithSameTitle && taskWithSameTitle.id !== id) {
       throw new Error("Task gia' presente in lista");
     }
     const response = await fetch(`${apiUrl}/tasks/${id}`, {

@@ -65,7 +65,9 @@ export default function AddTask() {
         style={{
           backgroundColor: titleValidation(title) ? "gray" : "green",
           cursor: titleValidation(title) ? "not-allowed" : "pointer",
+          color: "white",
         }}
+        className="btn-margin-top"
         type="submit"
         disabled={titleValidation(title)}
         onClick={handleSubmit}

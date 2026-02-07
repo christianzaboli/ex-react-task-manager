@@ -44,7 +44,9 @@ export default function TaskDetail() {
       >
         {detailedTask?.status}
       </strong>
-      <p>{dayjs(detailedTask?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</p>
+      <p className="detailed-task-date">
+        {dayjs(detailedTask?.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+      </p>
       <div className="detail-buttons">
         <button onClick={() => setShow(true)} className="red">
           Elimina Task

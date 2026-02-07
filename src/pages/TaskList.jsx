@@ -5,9 +5,9 @@ import { useState, useMemo, useCallback } from "react";
 // funzione di debounce
 function debounce(fn, delay) {
   let timer;
-  return (...args) => {
+  return (value) => {
     clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
+    timer = setTimeout(() => fn(value), delay);
   };
 }
 
@@ -78,7 +78,7 @@ export default function TaskList() {
   };
   return (
     <>
-      <h1 className="tasks-title">Tasks</h1>
+      <h1 className="tasks-title">Tasks manager avanzato</h1>
       <input
         type="text"
         placeholder="Ricerca task..."
@@ -89,9 +89,24 @@ export default function TaskList() {
         <thead>
           <tr>
             <th></th>
-            <th onClick={() => handleSort("title")}>Nome</th>
-            <th onClick={() => handleSort("status")}>Stato</th>
-            <th onClick={() => handleSort("createdAt")}>Data di Creazione</th>
+            <th
+              onClick={() => handleSort("title")}
+              className={sortBy === "title" && "th-active"}
+            >
+              Nome
+            </th>
+            <th
+              onClick={() => handleSort("status")}
+              className={sortBy === "status" && "th-active"}
+            >
+              Stato
+            </th>
+            <th
+              onClick={() => handleSort("createdAt")}
+              className={sortBy === "createdAt" && "th-active"}
+            >
+              Data di Creazione
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +121,9 @@ export default function TaskList() {
         </tbody>
       </table>
       {selectedTaskIds.length > 0 && (
-        <button onClick={handleMultipleDelete}>Elimina selezionate</button>
+        <button onClick={handleMultipleDelete} className="btn-margin-top">
+          Elimina selezionate
+        </button>
       )}
     </>
   );
