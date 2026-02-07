@@ -4,15 +4,20 @@ import { useState, useRef } from "react";
 export default function EditTaskModal({ show, task, onClose, onSave }) {
   if (!show) return null;
   const [title, setTitle] = useState(task?.title || "");
-  const [desc, setDesc] = useState(task?.description || "");
+  const [description, setDescription] = useState(task?.description || "");
   const [status, setStatus] = useState(task?.status || "To do");
   const formRef = useRef();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({ title, description, status });
+  };
   return createPortal(
     <Modal
       show={show}
       title={"Modifica Task"}
       content={
-        <form ref={formRef}>
+        <form ref={formRef} onSubmit={handleSubmit}>
           <input
             type="text"
             value={title}
@@ -21,8 +26,8 @@ export default function EditTaskModal({ show, task, onClose, onSave }) {
           />
           <textarea
             name="description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           ></textarea>
           <select
             name="status"
@@ -36,13 +41,11 @@ export default function EditTaskModal({ show, task, onClose, onSave }) {
         </form>
       }
       confirmText={"Salva"}
-      onConfirm={(e) => {
-        e.preventDefault();
+      onConfirm={() => {
         formRef.current.requestSubmit();
-        onSave({ title, description: desc, status });
       }}
       onClose={onClose}
     />,
-    document.body
+    document.body,
   );
 }

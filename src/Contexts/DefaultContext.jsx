@@ -8,10 +8,13 @@ export function useDefaultContext() {
 }
 
 export default function DefaultProvider({ children }) {
-  const { tasks, addTask, removeTask, updateTask } = useTasks();
+  const { tasks, addTask, removeTask, updateTask, removeMultipleTasks } =
+    useTasks();
 
   return (
-    <DefaultContext.Provider value={{ tasks, addTask, removeTask, updateTask }}>
+    <DefaultContext.Provider
+      value={{ tasks, addTask, removeTask, updateTask, removeMultipleTasks }}
+    >
       {children}
     </DefaultContext.Provider>
   );

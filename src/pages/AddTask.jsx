@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useDefaultContext } from "../Contexts/DefaultContext";
-import { useNavigate } from "react-router-dom";
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
 export default function AddTask() {
@@ -29,7 +28,7 @@ export default function AddTask() {
       addTask(data);
       setTitle("");
       descRef.current.value = "";
-      statusRef.current.value = "";
+      statusRef.current.value = "To do";
     }
   };
 

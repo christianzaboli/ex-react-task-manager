@@ -10,7 +10,9 @@ export default function TaskDetail() {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const detailTaskNum = useParams();
-  const detailedTask = tasks.find((t) => t.id == detailTaskNum.id);
+  const detailedTask = tasks.find(
+    (t) => Number(t.id) === Number(detailTaskNum.id),
+  );
   const navigate = useNavigate();
 
   const handleDelete = (id) => {
@@ -23,9 +25,8 @@ export default function TaskDetail() {
       alert(error.message);
     }
   };
-  const handleUpdate = (id, updatedTask) => {
-    updateTask(detailedTask.id, updatedTask);
-    alert("Task aggiornato");
+  const handleUpdate = (id, taskToUpdate) => {
+    updateTask(id, taskToUpdate);
     setShowEdit(false);
   };
   return (
@@ -43,7 +44,7 @@ export default function TaskDetail() {
       >
         {detailedTask?.status}
       </strong>
-      <p>{dayjs(detailedTask?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
+      <p>{dayjs(detailedTask?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</p>
       <div className="detail-buttons">
         <button onClick={() => setShow(true)} className="red">
           Elimina Task
