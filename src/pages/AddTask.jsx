@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDefaultContext } from "../Contexts/DefaultContext";
 const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 
@@ -8,7 +8,7 @@ export default function AddTask() {
   const [successfullAdd, setSuccessfullAdd] = useState("");
   const descRef = useRef();
   const statusRef = useRef();
-
+  const btnRef = useRef();
   const titleValidation = (title) => {
     if (title.trim() === "") {
       return "Compila il campo Titolo";
@@ -42,9 +42,24 @@ export default function AddTask() {
     }
   };
 
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === "Enter") {
+  //       e.preventDefault();
+  //       btnRef.current?.click();
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
+
   return (
     <div>
-      <form className="tasks-form">
+      <form className="tasks-form" onSubmit={handleSubmit}>
         <label>
           Titolo
           <input
@@ -80,7 +95,7 @@ export default function AddTask() {
         className="btn-margin-top"
         type="submit"
         disabled={titleValidation(title)}
-        onClick={handleSubmit}
+        ref={btnRef}
       >
         Aggiungi Task
       </button>
