@@ -5,6 +5,7 @@ const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 export default function AddTask() {
   const { addTask } = useDefaultContext();
   const [title, setTitle] = useState("");
+  const [successfullAdd, setSuccessfullAdd] = useState("");
   const descRef = useRef();
   const statusRef = useRef();
 
@@ -17,6 +18,7 @@ export default function AddTask() {
     }
     return "";
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (titleValidation(title) === "") {
@@ -25,10 +27,18 @@ export default function AddTask() {
         description: descRef.current.value,
         status: statusRef.current.value,
       };
-      addTask(data);
-      setTitle("");
-      descRef.current.value = "";
-      statusRef.current.value = "To do";
+      try {
+        addTask(data);
+        setTitle("");
+        setSuccessfullAdd("Task aggiunta con successo");
+        setTimeout(() => {
+          setSuccessfullAdd("");
+        }, 2500);
+        descRef.current.value = "";
+        statusRef.current.value = "To do";
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -74,6 +84,9 @@ export default function AddTask() {
       >
         Aggiungi Task
       </button>
+      {successfullAdd !== "" && (
+        <p className="success-text">{successfullAdd}</p>
+      )}
     </div>
   );
 }

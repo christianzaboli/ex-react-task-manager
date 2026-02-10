@@ -16,10 +16,10 @@ export default function Modal({
         <div className="modal-inner">{content}</div>
         <div>
           <button onClick={onConfirm}>{confirmText}</button>
-          <button onClick={onClose}>Annulla</button>
+          {onClose && <button onClick={onClose}>Annulla</button>}
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

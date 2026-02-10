@@ -1,6 +1,7 @@
 import { useDefaultContext } from "../Contexts/DefaultContext";
-import TaskRow from "../components/TaskRow";
 import { useState, useMemo, useCallback } from "react";
+import TaskRow from "../components/TaskRow";
+import Modal from "../components/Modal";
 
 // funzione di debounce
 function debounce(fn, delay) {
@@ -67,14 +68,12 @@ export default function TaskList() {
     return filteredtasks;
   }, [tasks, sortBy, sortOrder, searchQuery]);
 
-  const handleMultipleDelete = async () => {
-    try {
-      await removeMultipleTasks(selectedTaskIds);
-      alert("Tasks eliminate con successo");
-      setSelectedTaskIds([]);
-    } catch (error) {
-      console.error(error);
-    }
+  // Handling multiple delete
+  const [showAlert, setShowAlert] = useState(false);
+  const handleMultipleDelete = () => {
+    removeMultipleTasks(selectedTaskIds);
+    setShowAlert(false);
+    setSelectedTaskIds([]);
   };
   return (
     <>
@@ -121,10 +120,19 @@ export default function TaskList() {
         </tbody>
       </table>
       {selectedTaskIds.length > 0 && (
-        <button onClick={handleMultipleDelete} className="btn-margin-top">
+        <button onClick={() => setShowAlert(true)} className="btn-margin-top">
           Elimina selezionate
         </button>
       )}
+      <Modal
+        title={`Eliminare queste task?`}
+        content={"Questa azione é irreversible"}
+        show={showAlert}
+        onConfirm={() => {
+          handleMultipleDelete();
+        }}
+        onClose={() => setShowAlert(false)}
+      />
     </>
   );
 }

@@ -28,7 +28,7 @@ export default function useTasks() {
       alert('Errore nell"aggiunta della nuova task');
     }
     dispatchTasks({ type: "ADD_TASK", payload: obj.task });
-    alert("Task aggiunta con successo");
+    // alert("Task aggiunta con successo");
   }
 
   // RIMUOVI

@@ -1,6 +1,6 @@
 import { useDefaultContext } from "../Contexts/DefaultContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 
 import Modal from "../components/Modal";
@@ -11,6 +11,7 @@ export default function TaskDetail() {
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const detailedTask = tasks.find(
     (t) => Number(t.id) === Number(detailTaskNum.id),
@@ -18,13 +19,16 @@ export default function TaskDetail() {
 
   const handleDelete = (id) => {
     try {
-      removeTask(id);
-      alert("Task eliminato");
-      navigate("/");
+      setShow(false);
+      setShowAlert(true);
     } catch (error) {
       console.error(error);
       alert(error.message);
     }
+  };
+  const goodbye = (id) => {
+    navigate("/");
+    removeTask(id);
   };
   const handleUpdate = (taskToUpdate, updatedTask) => {
     updateTask(taskToUpdate, updatedTask);
@@ -54,13 +58,23 @@ export default function TaskDetail() {
         </button>
         <button onClick={() => setShowEdit(true)}>Modifica Task</button>
       </div>
+      {/* alerting modal */}
+      <Modal
+        title={`Task eliminato`}
+        content={"Avanti prossima"}
+        show={showAlert}
+        confirmText={"Torna alla lista"}
+        onConfirm={() => goodbye(detailedTask.id)}
+      />
+      {/* conferma eliminazione */}
       <Modal
         title={`Vuoi eliminare il task: ${detailedTask?.title}?`}
         content={"Questa azione è irreversibile."}
         show={show}
         onClose={() => setShow(false)}
-        onConfirm={() => handleDelete(detailedTask.id)}
+        onConfirm={() => handleDelete()}
       />
+      {/* editing modal */}
       <EditTaskModal
         show={showEdit}
         task={detailedTask}
